@@ -1,4 +1,5 @@
 #include "../include/download.h"
+#include <libgen.h>
 
 int get_status(int socket){
     char buffer[1024];
@@ -105,8 +106,10 @@ void recieve_file(int socket, int psocket, const char *file, const char *resourc
     printf("%d\n", status);
     */
     char output_path[256];
+    char *resource_copy = strdup(resource);
+    char *filename = basename(resource_copy);
     strcpy(output_path, "output/");
-    strcat(output_path, resource);
+    strcat(output_path, filename);
 
     printf("%s\n",output_path);
 
