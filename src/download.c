@@ -94,8 +94,7 @@ void recieve_file(int socket, int psocket, const char *file, const char *resourc
 
     char buf[MAX_LENGTH];
     int command_length;
-
-    command_length = snprintf(buf, MAX_LENGTH, "retr %s\n", file);
+    command_length = snprintf(buf, MAX_LENGTH, "retr %s\n", resource);
     if (send(socket, buf, command_length, 0) < 0){
         fprintf(stderr, "Error sending file request (%s).\n", file);
         exit(EXIT_FAILURE);
@@ -110,6 +109,7 @@ void recieve_file(int socket, int psocket, const char *file, const char *resourc
 
     FILE *fp = fopen(output_path, "w");
     if (fp == NULL){
+
         fprintf(stderr, "Error opening file (%s).\n", resource);
         exit(EXIT_FAILURE);
     }
