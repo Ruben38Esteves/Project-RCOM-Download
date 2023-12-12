@@ -13,12 +13,8 @@ int main(int argc, char *argv[]){
 
     struct URL url = parse_url(argv[1]);
 
-    printf("Username: %s\n", url.user);
-    printf("Password: %s\n", url.password);
-    printf("IP: %s\n", url.ip);
     printf("host: %s\n", url.host);
-    //printf("Port: %s\n", url.port);
-    //printf("Path: %s\n", url.path);
+    printf("IP: %s\n", url.ip);
 
     struct sockaddr_in sv_sock;
 
@@ -41,9 +37,14 @@ int main(int argc, char *argv[]){
         exit(-1);
     }
 
+    printf("\n");
+    printf("Username: %s\n", url.user);
+    printf("Password: %s\n", url.password);
     authenticate(sock, url.user, url.password);
+    printf("User authenticated.\n\n");
 
     get_passive(sock, url.ip, url.port);
+    printf("Port: %s\n", url.port);
 
     struct sockaddr_in sv_sock2;
 
@@ -64,7 +65,7 @@ int main(int argc, char *argv[]){
         perror("connect()");
         exit(-1);
     }
-
+    
     recieve_file(sock, psock, url.filepath, url.resource);
 
     close(sock);

@@ -23,7 +23,6 @@
 #define USER_REGEX      "%*[^/]//%[^:/]"
 #define PASS_REGEX      "%*[^/]//%*[^:]:%[^@\n$]"
 //#define RESPCODE_REGEX  "%d"
-//#define PASSIVE_REGEX   "%*[^(](%d,%d,%d,%d,%d,%d)%*[^\n$)]"
 
 #define DEFAULT_USER        "anonymous"
 #define DEFAULT_PASSWORD    "password"

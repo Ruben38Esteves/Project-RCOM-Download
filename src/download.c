@@ -24,7 +24,7 @@ int get_status(int socket){
 }
 
 void authenticate(int socket, const char *username, const char *password){
-    char buf[266];
+    char buf[MAX_LENGTH];
     int command_length;
 
     if (get_status(socket) != READY4AUTH)
@@ -32,7 +32,7 @@ void authenticate(int socket, const char *username, const char *password){
         fprintf(stderr, "Server is not ready.\n");
         exit(EXIT_FAILURE);
     }
-    command_length = snprintf(buf, 266, "USER %s\n", username);
+    command_length = snprintf(buf, MAX_LENGTH, "USER %s\n", username);
     if (send(socket, buf, command_length, 0) < 0)
     {
         fprintf(stderr, "Error sending username (%s).\n", username);
@@ -45,7 +45,7 @@ void authenticate(int socket, const char *username, const char *password){
         exit(EXIT_FAILURE);
     }
 
-    command_length = snprintf(buf, 266, "PASS %s\n", password);
+    command_length = snprintf(buf, MAX_LENGTH, "PASS %s\n", password);
     if (send(socket, buf, command_length, 0) < 0)
     {
         fprintf(stderr, "Error sending password (%s).\n", password);
@@ -60,7 +60,7 @@ void authenticate(int socket, const char *username, const char *password){
 }
 
 void get_passive(int socket, char *host, char *port){
-    char *in_buf = "pasv\n", out_buf[256];
+    char *in_buf = "pasv\n", out_buf[MAX_LENGTH];
 
     if (send(socket, in_buf, strlen(in_buf), 0) < 0)
     {
@@ -87,31 +87,26 @@ void get_passive(int socket, char *host, char *port){
 
     sprintf(host, "%hhu.%hhu.%hhu.%hhu", h1, h2, h3, h4);
     sprintf(port, "%hu", p1 * 256 + p2);
-    printf("%s\n",port);
+    printf("Entered passive mode\n");
 }
 
 void recieve_file(int socket, int psocket, const char *file, const char *resource){
 
-    char buf[266];
+    char buf[MAX_LENGTH];
     int command_length;
 
-    command_length = snprintf(buf, 266, "retr %s\n", file);
-    if (send(socket, buf, command_length, 0) < 0)
-    {
+    command_length = snprintf(buf, MAX_LENGTH, "retr %s\n", file);
+    if (send(socket, buf, command_length, 0) < 0){
         fprintf(stderr, "Error sending file request (%s).\n", file);
         exit(EXIT_FAILURE);
     }
-    /*
-    int status = get_status(socket);
-    printf("%d\n", status);
-    */
-    char output_path[256];
+
+    char output_path[MAX_LENGTH];
     char *resource_copy = strdup(resource);
     char *filename = basename(resource_copy);
     strcpy(output_path, "output/");
     strcat(output_path, filename);
 
-    printf("%s\n",output_path);
 
     FILE *fp = fopen(output_path, "w");
     if (fp == NULL){
@@ -119,11 +114,14 @@ void recieve_file(int socket, int psocket, const char *file, const char *resourc
         exit(EXIT_FAILURE);
     }
 
-    char buf2[256];
+    char buf2[MAX_LENGTH];
     ssize_t bytes;
+
     while ((bytes = recv(psocket, buf2, sizeof buf2 - 1, 0)) > 0){
         fwrite(buf2, 1, bytes, fp);
     }
+
+    printf("File saved in %s\n",output_path);
 
     fclose(fp);
 }
