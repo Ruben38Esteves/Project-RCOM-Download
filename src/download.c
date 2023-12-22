@@ -59,7 +59,7 @@ void authenticate(int socket, const char *username, const char *password){
     }
 }
 
-void get_passive(int socket, char *host, char *port){
+void get_passive(int socket, char *ip, char *port){
     char *in_buf = "pasv\n", out_buf[MAX_LENGTH];
 
     if (send(socket, in_buf, strlen(in_buf), 0) < 0)
@@ -85,7 +85,7 @@ void get_passive(int socket, char *host, char *port){
         exit(EXIT_FAILURE);
     }
 
-    sprintf(host, "%hhu.%hhu.%hhu.%hhu", h1, h2, h3, h4);
+    sprintf(ip, "%hhu.%hhu.%hhu.%hhu", h1, h2, h3, h4);
     sprintf(port, "%hu", p1 * 256 + p2);
     printf("Entered passive mode\n");
 }

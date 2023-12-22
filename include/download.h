@@ -24,7 +24,7 @@ int get_status(int socket);
 
 void authenticate(int socket, const char *username, const char *password);
 
-void get_passive(int socket, char *host, char *port);
+void get_passive(int socket, char *ip, char *port);
 
 void recieve_file(int socket, int psocket, const char *file, const char *resource);
 
